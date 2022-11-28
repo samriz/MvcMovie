@@ -1,0 +1,40 @@
+@{
+    ViewData["Title"] = "Movies";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <div id="moviesList"></div>
+    <form>
+        <input type="text" id="inputMovie" placeholder="Movie Name"/>
+        <button type="button" onclick="AddMovie()">Add Movie</button>
+    </form>
+    <script>
+        async function AddMovie()
+        {
+            let movieName = document.getElementById('inputMovie').value;
+            const movie = {name: movieName};
+            console.log(movieName);
+            let response = await fetch("/Movie/PostMovie", {
+                method: "POST",
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(movie) 
+            });
+
+            if(response.ok) await getMovies();
+        }
+
+        async function getMovies()
+            {
+                let response = await fetch("/Movie/GetMovies", {
+                    method: "GET"
+                });
+
+                if(response.ok)
+                {
+                    let div = document.getElementById("moviesList");
+                    div.innerHTML = await response.text();
+                }
+            }
+    </script>>
+</div>
